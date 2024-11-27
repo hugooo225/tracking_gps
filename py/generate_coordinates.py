@@ -1,59 +1,101 @@
+import os
 import random as rd
 import numpy as np #type: ignore
 import matplotlib.pyplot as plt #type: ignore
 import constants
+import osmnx as ox #type: ignore
+import folium #type: ignore
 
-# generate new coordinates given the previous ones
-def get_next_coordinates(prev_coords, dist) :
+# get the coordinates of a node
+def get_coordinates(graph, node) :
+    node = graph.nodes[node]
+    return node["y"], node["x"]
 
-    # if we consider the previous point as the origin of an euclidean plane and (x1, y1) the new coordinates, we have :
-    # y1 = y0 + sqrt(d² - (x0 - x1)²) => x1 > x0 - d
-    # (with d the distance between the two points)
-    # so we just have to generate a random number for x1
-    x0, y0 = prev_coords
-    x1 = rd.uniform(x0 - dist, x0 + dist)
-    y1 = y0 + rd.choice([-1, 1])*np.sqrt(dist**2 - (x0 - x1)**2)
 
-    return (x1, y1)
+# get the graph of the considered city
+def get_city_graph(city) :
+    return ox.graph_from_place(city, network_type='walk', simplify=True).to_undirected()
+
+
+# get a random node from the graph
+def get_random_node(graph) :
+    return rd.choice(list(graph.nodes()))
+
+
+# get a random neighbor of a given node
+def get_random_neighbor(graph, node) :
+    return rd.choice(list(graph.neighbors(node)))
+
+
+# generate visited points 
+def generate_points(graph, origin_node, n_points) :
+
+    # initialization
+    nodes_list = [origin_node]
+
+    # visiting the nodes
+    for _ in range(n_points) :
+        neighbor = get_random_neighbor(graph, nodes_list[-1])
+        nodes_list.append(neighbor)
     
+    # convert the nodes into classic coordinates (latitude and longitude)
+    nodes_list = [get_coordinates(graph, node) for node in nodes_list]
 
-# generate a set of coordinates
-def generate_coordinates(n, dist) :
-
-    # initiation
-    coord_list = [constants.BASE_COORDINATES]
-
-    # build the list
-    for _ in range(n) :
-        new_coord = get_next_coordinates(coord_list[-1], dist)
-        coord_list.append(new_coord)
-    
-    return coord_list
+    return nodes_list
 
 
-# display the coordinates list
-def display_coordinates(coord_list) :
+# create the map to visualize the points (centered on the first node)
+def create_map(graph, first_node) :
+    latitude, longitude = get_coordinates(graph, first_node)
+    return folium.Map(location=[latitude, longitude], zoom_start=14)
 
-    # list of latitudes and longitudes
-    latitudes_list = [coord[0] for coord in coord_list]
-    longitudes_list = [coord[1] for coord in coord_list]
 
-    # creation of the figure
-    plt.figure(figsize=(10, 6))
-    plt.plot(longitudes_list, latitudes_list, marker='o', label="Trajet")
-    plt.scatter(longitudes_list, latitudes_list, color='red', zorder=5, label="Points")
-    plt.grid(True)
-    plt.axis("equal")
+# add a list of points (latitude, longitude) to the map
+def add_points_map(map, points_list) :
 
-    # display the figure
-    plt.show()
+    # iterating through the points
+    for point in points_list :
+
+        # add the points on the map
+        folium.CircleMarker(
+            location = (point[0], point[1]),
+            radius = 3,
+            color = "blue",
+            fill = True,
+            fill_color = "blue"
+        ).add_to(map)
+
+    # add the lines on the map
+    folium.PolyLine(points_list, color='red').add_to(map)
+
+    return map
+
+
+# save the map in HTML format
+def save_map(map, path) :
+    map.save(path)
 
 
 # execution 
 if __name__ == "__main__" :
 
-    # generate the list of coordinates
-    coord_list = generate_coordinates(50, constants.DIST_COORDS)
+    # create the graph and get the origin node
+    graph = get_city_graph(constants.CITY)
+    origin_node = get_random_node(graph)
 
-    # display the generated points
-    display_coordinates(coord_list)
+    # generate visited points
+    visited_points = generate_points(graph, origin_node, constants.N_POINTS)
+
+    # create the map to display the points
+    map = create_map(graph, origin_node)
+
+    # add the points and the lines on the map
+    map = add_points_map(map, visited_points)
+
+    # save the map
+    save_map(map, constants.MAP_PATH)
+
+
+
+# - éviter les cycles
+# - faire passer les chemins pile sur les routes
