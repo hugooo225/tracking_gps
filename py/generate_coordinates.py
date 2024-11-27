@@ -22,9 +22,25 @@ def get_random_node(graph) :
     return rd.choice(list(graph.nodes()))
 
 
+# get the neighbors of a given node
+def get_neighbors(graph, node) :
+    return list(graph.neighbors(node))
+
+
 # get a random neighbor of a given node
-def get_random_neighbor(graph, node) :
-    return rd.choice(list(graph.neighbors(node)))
+def get_random_neighbor(graph, node, visited_points) :
+
+    # creation of neighbors lists
+    neighbors_list = get_neighbors(graph, node)
+    filtered_neighbors_list = [neighbor for neighbor in neighbors_list if neighbor not in visited_points]
+
+    # selection of the next node
+    if filtered_neighbors_list != [] :
+        next_node = rd.choice(filtered_neighbors_list)
+    else :
+        next_node = rd.choice(neighbors_list)
+    
+    return next_node
 
 
 # generate visited points 
@@ -35,9 +51,9 @@ def generate_points(graph, origin_node, n_points) :
 
     # visiting the nodes
     for _ in range(n_points) :
-        neighbor = get_random_neighbor(graph, nodes_list[-1])
+        neighbor = get_random_neighbor(graph, nodes_list[-1], nodes_list)
         nodes_list.append(neighbor)
-    
+
     # convert the nodes into classic coordinates (latitude and longitude)
     nodes_list = [get_coordinates(graph, node) for node in nodes_list]
 
@@ -94,8 +110,3 @@ if __name__ == "__main__" :
 
     # save the map
     save_map(map, constants.MAP_PATH)
-
-
-
-# - éviter les cycles
-# - faire passer les chemins pile sur les routes
