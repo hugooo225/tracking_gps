@@ -1,23 +1,14 @@
-# temporary files
-temp.py
+# configuration files
+.vscode
 
 # virtual environment
 env_project
 
-# fichier html
-back/*.html
-
-bd
-
-# unused files
-.vscode
+# cache
 __pycache__
 cache
 
-
-
-
-# Logs
+# Vue files
 logs
 *.log
 npm-debug.log*
@@ -25,18 +16,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
 node_modules
 .DS_Store
 dist
 dist-ssr
 coverage
 *.local
-
 /cypress/videos/
 /cypress/screenshots/
-
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -45,7 +32,4 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
 *.tsbuildinfo
-
-test.py
