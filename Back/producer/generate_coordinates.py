@@ -6,10 +6,11 @@ import constants
 import osmnx as ox #type: ignore
 import folium #type: ignore
 
+
 # get the coordinates of a node
 def get_coordinates(graph, node) :
     node = graph.nodes[node]
-    return node["y"], node["x"]
+    return {'latitude' : node["y"], 'longitude' : node["x"]}
 
 
 # get the graph of the considered city
@@ -41,6 +42,16 @@ def get_random_neighbor(graph, node, visited_points) :
         next_node = rd.choice(neighbors_list)
     
     return next_node
+
+
+def generate_point(graph, previous_node,visited_points):
+    # visiting the nodes
+    neighbor = get_random_neighbor(graph, previous_node,visited_points)
+
+    # convert the nodes into classic coordinates (latitude and longitude)
+    neighbor = get_coordinates(graph, neighbor) 
+
+    return neighbor
 
 
 # generate visited points 
