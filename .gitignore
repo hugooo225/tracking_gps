@@ -2,7 +2,12 @@
 temp.py
 
 # virtual environment
-py/env_project
+env_project
 
-#fichier html
+# fichier html
 *.html
+
+# unused files
+.vscode
+__pycache__
+cache
