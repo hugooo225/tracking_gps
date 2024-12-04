@@ -29,7 +29,7 @@ if __name__ == "__main__" :
             next_point = g.generate_point(graph, previous_node,visited_points)
             visited_points.append(next_point)
             # Envoie du message au Kafka
-            producer.produce(topic, key="IP1", value=json.dumps(next_point).encode('utf-8'), partition=partition)
+            producer.produce(topic, key="192.0.0.1", value=json.dumps(next_point).encode('utf-8'), partition=partition)
             producer.flush()
             print(f"Message envoyer : {next_point} (Partition: {partition})")
             time.sleep(1)

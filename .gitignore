@@ -11,3 +11,5 @@ env_project
 .vscode
 __pycache__
 cache
+
+test.py

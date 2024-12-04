@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
     zookeeper:
         image: wurstmeister/zookeeper
@@ -18,20 +18,37 @@ services:
           - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
           - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
           - ALLOW_PLAINTEXT_LISTENER=yes
-          - TOPIC_AUTO_CREATE=false
+          - KAFKA_CREATE_TOPICS="coordinates:2:1"
+          # - TOPIC_AUTO_CREATE=true
           - DELETE_TOPIC_ENABLE=true
         depends_on:
           - zookeeper
     
 
     postgres:
-      image: postgres
-      container_name: postgres-container
+      image: postgres:latest
+      container_name: my_postgres
       environment:
         POSTGRES_USER: admin
-        POSTGRES_PASSWORD: secret
-        POSTGRES_DB: tracking
+        POSTGRES_PASSWORD: 1234
+        POSTGRES_DB: gps_tracking_db
       ports:
         - "5432:5432"
       volumes:
-        - /home/cytech/2024_2025_IA/tracking_gps/bd:/var/lib/postgresql/data
+        - ./initdb.d:/docker-entrypoint-initdb.d
+        - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+    #postgres:
+    #  image: postgres
+    #  container_name: postgres-container
+    #  environment:
+    #    POSTGRES_USER: admin
+    #    POSTGRES_PASSWORD: secret
+    #    POSTGRES_DB: tracking
+    #  ports:
+    #    - "5432:5432"
+    #  volumes:
+    #    - ./bd:/var/lib/postgresql/tracking
