@@ -2,12 +2,59 @@ from confluent_kafka import Consumer
 import json
 import psycopg2
 import time
+import asyncpg
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+
 
 
 app = FastAPI()
 
-#@app.websocket("/ws/coordonnees/{IP}")
+DATABASE_URL = "postgresql://admin:1234@localhost:5432/gps_tracking_db"
+active_connections = {}
+
+async def get_last_coordonnees_for_ip(IP: str):
+    try:
+        conn = await asyncpg.connect(DATABASE_URL)
+        query = """
+            SELECT id, IP, latitude, longitude, date_heure
+            FROM coordonnees
+            WHERE IP = $1
+            ORDER BY date_heure DESC
+            LIMIT 1;
+        """
+        result = await conn.fetchrow(query, IP)
+        await conn.close()
+        return result
+    except Exception as e:
+        print(f"Erreur lors de la récupération des données : {e}")
+        return None
+
+
+@app.websocket("/ws/coordonnees/{IP}")
+async def websocket_endpoint(websocket: WebSocket, IP: str):
+    await websocket.accept()  # Accepter la connexion WebSocket
+
+    # Stocker la WebSocket dans les connexions actives
+    active_connections[IP] = websocket
+    try:
+        # Envoyer immédiatement la dernière coordonnée
+        coordonnee = await get_last_coordonnees_for_ip(IP)
+        if coordonnee:
+            coordonnee_json = {
+                "id": coordonnee["id"],
+                "IP": coordonnee["ip"].strip(),
+                "latitude": float(coordonnee["latitude"]),
+                "longitude": float(coordonnee["longitude"]),
+                "date_heure": coordonnee["date_heure"].isoformat() if coordonnee["date_heure"] else None
+            }
+            await websocket.send_text(json.dumps(coordonnee_json))
+
+        # Maintenir la connexion WebSocket ouverte
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        print(f"Client with IP {IP} disconnected.")
+        active_connections.pop(IP, None)
 
 
 db_config = {
@@ -49,7 +96,7 @@ if __name__ == "__main__" :
         INSERT INTO coordonnees (IP, latitude, longitude)
         VALUES (%s, %s, %s);
         '''
-        
+
         try:
             while True:
                 msg = consumer.poll(1.0)
@@ -59,9 +106,13 @@ if __name__ == "__main__" :
                     print(f"Erreur : {msg.error()}")
                     continue
                 data = json.loads(msg.value().decode('utf-8'))
+                
                 latitude = data['latitude']
                 longitude = data['longitude']
                 IP = msg.key().decode('utf-8')
+                if active_connections.get(IP) :
+                    active_connections.get(IP).send_text(json.dumps(data))
+
                 record = (IP,latitude,longitude)
                 cursor.execute(insert_query,record)
                 connection.commit()
