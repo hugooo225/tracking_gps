@@ -5,7 +5,9 @@ temp.py
 env_project
 
 # fichier html
-*.html
+back/*.html
+
+bd
 
 # unused files
 .vscode
