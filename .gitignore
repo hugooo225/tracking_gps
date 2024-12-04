@@ -3,3 +3,6 @@ temp.py
 
 # virtual environment
 py/env_project
+
+#fichier html
+*.html
