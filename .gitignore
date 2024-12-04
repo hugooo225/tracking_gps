@@ -47,3 +47,5 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+test.py
