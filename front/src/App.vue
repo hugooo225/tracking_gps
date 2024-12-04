@@ -1,47 +1,40 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import 'leaflet/dist/leaflet.css';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div id="map"></div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script>
+import L from 'leaflet';
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+export default {
+    name: 'MapComponent',
+    mounted() {
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+        var map = L.map('map').setView([43.30856651983747, -0.36764327846338196], 14);
+      
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        var circle1 = L.circle([43.31674716329061, -0.35925523954980837], {
+            color: 'red',
+            fillColor: 'red',
+            fillOpacity: 0.5,
+            radius: 20
+        }).addTo(map);
+        circle1.bindPopup("L'utilisateur IP1 a été détecté dans cette zone.");
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+        var circle2 = L.circle([43.29157162677075, -0.36958337105246714], {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: 0.5,
+            radius: 20
+        }).addTo(map);
+        circle2.bindPopup("L'utilisateur IP2 a été détecté dans cette zone.");
+    }
+};
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+</script>
