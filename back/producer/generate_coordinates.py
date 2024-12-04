@@ -1,10 +1,7 @@
-import os
 import random as rd
-import numpy as np #type: ignore
-import matplotlib.pyplot as plt #type: ignore
 import constants
-import osmnx as ox #type: ignore
-import folium #type: ignore
+import osmnx as ox
+import folium
 
 
 # get the coordinates of a node
