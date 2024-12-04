@@ -34,4 +34,4 @@ services:
       ports:
         - "5432:5432"
       volumes:
-        - /home/cytech/2024_2025_IA/tracking_gps/bd:/var/lib/postgresql/data
+        - ./bd:/var/lib/postgresql/data
