@@ -141,4 +141,3 @@ def consumer_kafka():
 @app.on_event("startup")
 async def startup():
     threading.Thread(target=consumer_kafka, daemon=True).start()
-

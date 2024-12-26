@@ -1,0 +1,11 @@
+[
+    {
+        "bootstrap.servers": "kafka:9092",
+        "client.id": "producer-2"
+    },
+    {
+        "topic": "coordinates",
+        "CITY": "Mauves-sur-Loire, France",
+        "partition": "1"
+    }
+]
