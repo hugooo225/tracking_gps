@@ -20,6 +20,8 @@ services:
           - KAFKA_CREATE_TOPICS=coordinates:2:1
           # - TOPIC_AUTO_CREATE=true
           - DELETE_TOPIC_ENABLE=true
+          - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+          - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
         depends_on:
           - zookeeper
 
@@ -35,6 +37,27 @@ services:
         volumes:
           - ./initdb.d:/docker-entrypoint-initdb.d
           - postgres_data:/var/lib/postgresql/data
+
+
+    producer:
+      build:
+        context: ./back/producer  
+        dockerfile: Dockerfile   
+      container_name: producer
+      environment:
+        - BOOTSTRAP_SERVERS=kafka:9092
+      depends_on:
+        - kafka
+
+    producer_2:
+      build:
+        context: ./back/producer_2  
+        dockerfile: Dockerfile   
+      container_name: producer_2
+      environment:
+        - BOOTSTRAP_SERVERS=kafka:9092
+      depends_on:
+        - kafka
 
     consumer:
         build:
