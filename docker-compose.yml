@@ -79,7 +79,7 @@ services:
           dockerfile: Dockerfile
         container_name: front
         ports:
-          - '5371:5371'
+          - '5173:5173'
         depends_on:
           - consumer
 

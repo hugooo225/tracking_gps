@@ -22,11 +22,11 @@ export default {
             };
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                if (data.ip === "192.0.0.1") {
-                    updateCircle(circle_ip1, data.lat, data.lng);
-                } else if (data.ip === "192.0.0.2") {
-                    updateCircle(circle_ip2, data.lat, data.lng);
-                }
+                // if (data.ip === "192.0.0.1") {
+                updateCircle(circle_ip1, data.lat, data.lng);
+                // } else if (data.ip === "192.0.0.2") {
+                //     updateCircle(circle_ip2, data.lat, data.lng);
+                // }
             };
         }
 
