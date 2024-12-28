@@ -53,12 +53,8 @@ export default {
         }).addTo(map);
         circle_2.bindPopup("L'utilisateur IP2 a été détecté dans cette zone.");
 
-        observer("ws://localhost:8080/ws/coordonnees", circle_1, circle_2);
+        observer("ws://localhost:8000/ws/coordonnees", circle_1, circle_2);
     }
 };
-
-// attention : doit pas y avoir d'erreurs si un des deux tombe
-// créer dockerfile dans le front pour lancer un npm run dev + autre (demander à chatgpt)
-// on fait tous nos dockerfiles pour qu'on se fasse le docker compose ensemble lundi
 
 </script>
