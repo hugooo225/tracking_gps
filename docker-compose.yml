@@ -80,6 +80,8 @@ services:
         container_name: front
         ports:
           - '5371:5371'
+        depends_on:
+          - consumer
 
 volumes:
   postgres_data:
