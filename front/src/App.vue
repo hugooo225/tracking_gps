@@ -55,6 +55,7 @@ export default {
         circle_2.bindPopup("L'utilisateur IP2 a été détecté dans cette zone.");
 
         observer("ws://localhost:8000/ws/coordonnees", circle_1, circle_2); 
+
     }
 };
 
