@@ -9,7 +9,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 app = FastAPI()
 
-DATABASE_URL = "postgresql://admin:1234@localhost:5432/gps_tracking_db"
+DATABASE_URL = "postgresql://admin:1234@my_postgres:5432/gps_tracking_db"
 active_connections = {}
 
 async def get_last_coordonnees():
@@ -60,7 +60,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 def consumer_kafka():
     db_config = {
-        'host': 'localhost',
+        'host': 'my_postgres',
         'port': '5432',
         'dbname': 'gps_tracking_db',
         'user': 'admin',

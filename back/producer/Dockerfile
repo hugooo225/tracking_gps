@@ -12,4 +12,4 @@ COPY . /app
 
 RUN pip install --no-cache-dir osmnx confluent-kafka
     
-CMD ["python", "main.py"]
+CMD ["sh", "-c", "sleep 10 && python main.py"]
