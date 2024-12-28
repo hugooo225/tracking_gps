@@ -17,9 +17,12 @@ async def get_last_coordonnees():
         conn = await asyncpg.connect(DATABASE_URL)
         query = """
             SELECT id, IP, latitude, longitude, date_heure
-            FROM coordonnees
-            ORDER BY date_heure DESC
-            LIMIT 1;
+            FROM (
+                SELECT id, IP, latitude, longitude, date_heure,
+                    ROW_NUMBER() OVER (PARTITION BY IP ORDER BY date_heure DESC) AS rank
+                FROM coordonnees
+            ) ranked
+            WHERE rank = 1; 
         """
         result = await conn.fetchrow(query)
         await conn.close()
@@ -30,6 +33,9 @@ async def get_last_coordonnees():
 
 @app.websocket("/ws/coordonnees")
 async def websocket_endpoint(websocket: WebSocket):
+    client_host = websocket.client.host
+    print(f"Nouvelle connexion WebSocket depuis {client_host}")
+
     await websocket.accept()  # Accepter la connexion WebSocket
 
     # Ajouter la connexion WebSocket aux connexions actives
