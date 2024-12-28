@@ -34,7 +34,7 @@ def main():
             try : 
                 producer.produce(topic, key=IP, value=json.dumps(next_point).encode('utf-8'), partition=partition)
                 producer.flush()
-                print(f"Message envoyer : {next_point} (Partition: {partition})")
+                print(f"Message envoyé : {next_point} (Partition: {partition})")
                 time.sleep(1)
             except Exception as e :
                 print(f"Erreur : {e}")

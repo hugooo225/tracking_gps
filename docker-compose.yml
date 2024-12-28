@@ -73,6 +73,14 @@ services:
         ports:
           - '8000:8000'  # Expose l'API FastAPI
 
+    front:
+        build:
+          context: ./front
+          dockerfile: Dockerfile
+        container_name: front
+        ports:
+          - '5371:5371'
+
 volumes:
   postgres_data:
 
