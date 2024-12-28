@@ -23,6 +23,7 @@ export default {
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 // if (data.ip === "192.0.0.1") {
+                console.log(data);
                 updateCircle(circle_ip1, data.lat, data.lng);
                 // } else if (data.ip === "192.0.0.2") {
                 //     updateCircle(circle_ip2, data.lat, data.lng);
@@ -53,7 +54,8 @@ export default {
         }).addTo(map);
         circle_2.bindPopup("L'utilisateur IP2 a été détecté dans cette zone.");
 
-        observer("ws://consumer:8000/ws/coordonnees", circle_1, circle_2);
+        observer("ws://localhost:8000/ws/coordonnees", circle_1, circle_2); 
+
     }
 };
 

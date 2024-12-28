@@ -18,6 +18,7 @@ RUN apt-get update \
 
 # Installer les dépendances Python directement
 RUN pip install --no-cache-dir fastapi uvicorn asyncpg psycopg2-binary confluent-kafka
+RUN pip install "uvicorn[standard]" websockets  # Ajout du support WebSocket
 
 # Exposer le port utilisé par FastAPI
 EXPOSE 8000
