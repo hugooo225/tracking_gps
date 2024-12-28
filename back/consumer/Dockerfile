@@ -24,4 +24,3 @@ EXPOSE 8000
 
 # Commande pour lancer le script avec uvicorn
 CMD ["sh", "-c", "sleep 10 && uvicorn consumer:app --host 0.0.0.0 --port 8000 --reload"]
-
