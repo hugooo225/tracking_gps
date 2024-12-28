@@ -11,5 +11,5 @@ RUN apt-get update && apt-get install -y \
 COPY . /app
 
 RUN pip install --no-cache-dir osmnx confluent-kafka
-    
+
 CMD ["sh", "-c", "sleep 10 && python main.py"]
