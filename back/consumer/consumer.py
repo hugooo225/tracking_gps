@@ -7,12 +7,13 @@ import asyncpg
 import threading
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
+# initialisation
 app = FastAPI()
-
 DATABASE_URL = "postgresql://admin:1234@my_postgres:5432/gps_tracking_db"
 active_connections = {}
 
-async def get_last_coordonnees():
+# request the database to get the last coordinates
+async def get_last_coordinates():
     try:
         conn = await asyncpg.connect(DATABASE_URL)
         query = """
@@ -31,21 +32,21 @@ async def get_last_coordonnees():
         print(f"Erreur lors de la récupération des données : {e}")
         return None
 
+# websocket endpoint (used by the front to display the points)
 @app.websocket("/ws/coordonnees")
 async def websocket_endpoint(websocket: WebSocket):
+
     client_host = websocket.client.host
-    print(f"Nouvelle connexion WebSocket depuis {client_host}")
+    print(f"Nouvelle connexion WebSocket depuis : {client_host}")
 
-    await websocket.accept()  # Accepter la connexion WebSocket
+    await websocket.accept()
 
-    # Ajouter la connexion WebSocket aux connexions actives
-    connection_id = id(websocket)  # Identifiant unique pour la connexion
+    connection_id = id(websocket)
     active_connections[connection_id] = websocket
     print(f"Nouvelle connexion WebSocket : {connection_id}")
 
     try:
-        # Envoyer immédiatement la dernière coordonnée connue
-        coordonnee = await get_last_coordonnees()
+        coordonnee = await get_last_coordinates()
         if coordonnee:
             coordonnee_json = {
                 "id": coordonnee["id"],
@@ -56,15 +57,16 @@ async def websocket_endpoint(websocket: WebSocket):
             }
             await websocket.send_text(json.dumps(coordonnee_json))
 
-        # Maintenir la connexion WebSocket ouverte
         while True:
-            await websocket.receive_text()  # Garder la connexion active
+            await websocket.receive_text()
+
     except WebSocketDisconnect:
         print(f"Client {connection_id} déconnecté.")
         active_connections.pop(connection_id, None)
 
-
+# Kafka consumer (to insert the coordinates on the database)
 def consumer_kafka():
+
     db_config = {
         'host': 'my_postgres',
         'port': '5432',
@@ -90,7 +92,6 @@ def consumer_kafka():
     print(f"Consommateur abonné au topic : {topic}")
 
     try:
-        # Connexion à PostgreSQL
         connection = psycopg2.connect(**db_config)
         cursor = connection.cursor()
         print("Connexion réussie à PostgreSQL")
@@ -113,7 +114,6 @@ def consumer_kafka():
             longitude = data['longitude']
             IP = msg.key().decode('utf-8')
 
-            # Diffusion des données à toutes les connexions WebSocket
             for connection_id, websocket in list(active_connections.items()):
                 try:
                     data_json = json.dumps({
@@ -126,16 +126,18 @@ def consumer_kafka():
                     print(f"Erreur lors de l'envoi au client {connection_id} : {e}")
                     active_connections.pop(connection_id, None)
 
-            # Insertion dans la base de données
             record = (IP, latitude, longitude)
             cursor.execute(insert_query, record)
             connection.commit()
-            print(f"Message enregistré : ( {IP} , {latitude} , {longitude} ) (Partition: {msg.partition()}, Offset: {msg.offset()})")
+            print(f"Message enregistré : ({IP}, {latitude}, {longitude}) (Partition: {msg.partition()}, Offset: {msg.offset()})")
             time.sleep(1)
+
     except KeyboardInterrupt:
         print("Arrêt du consommateur.")
+
     except (Exception, psycopg2.Error) as error:
         print("Erreur lors de l'opération PostgreSQL :", error)
+
     finally:
         consumer.close()
         if cursor:
@@ -143,6 +145,7 @@ def consumer_kafka():
         if connection:
             connection.close()
         print("Connexion PostgreSQL fermée")
+
 
 @app.on_event("startup")
 async def startup():
