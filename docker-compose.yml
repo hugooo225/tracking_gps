@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+
     zookeeper:
         image: wurstmeister/zookeeper
         container_name: zookeeper
@@ -18,7 +19,6 @@ services:
           - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
           - ALLOW_PLAINTEXT_LISTENER=yes
           - KAFKA_CREATE_TOPICS=coordinates:2:1
-          # - TOPIC_AUTO_CREATE=true
           - DELETE_TOPIC_ENABLE=true
           - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
           - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
@@ -37,7 +37,6 @@ services:
         volumes:
           - ./initdb.d:/docker-entrypoint-initdb.d
           - postgres_data:/var/lib/postgresql/data
-
 
     producer:
       build:
@@ -85,4 +84,3 @@ services:
 
 volumes:
   postgres_data:
-

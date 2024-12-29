@@ -1,38 +1,12 @@
 # configuration files
 .vscode
 
-# virtual environment
+# python virtual environment
 env_project
 
 # cache
 __pycache__
 cache
 
-# Vue files
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# frontend (Vue files)
 node_modules
-.DS_Store
-dist
-dist-ssr
-coverage
-*.local
-/cypress/videos/
-/cypress/screenshots/
-.vscode/*
-!.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.tsbuildinfo
-
-todo
-temp.py

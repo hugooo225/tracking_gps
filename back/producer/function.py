@@ -2,27 +2,22 @@ import random as rd
 import osmnx as ox
 import socket
 
-
 # get the coordinates of a node
 def get_coordinates(graph, node) :
     node = graph.nodes[node]
     return {'latitude' : node["y"], 'longitude' : node["x"]}
 
-
 # get the graph of the considered city
 def get_city_graph(city) :
-    return ox.graph_from_place(city, network_type='walk', simplify=True).to_undirected()
-
+    return ox.graph_from_place(city, network_type='drive', simplify=True).to_undirected()
 
 # get a random node from the graph
 def get_random_node(graph) :
     return rd.choice(list(graph.nodes()))
 
-
 # get the neighbors of a given node
 def get_neighbors(graph, node) :
     return list(graph.neighbors(node))
-
 
 # get a random neighbor of a given node
 def get_random_neighbor(graph, node, visited_points) :
@@ -43,7 +38,7 @@ def get_random_neighbor(graph, node, visited_points) :
 
     return next_node
 
-
+# get a local IP address
 def get_local_ip():
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
