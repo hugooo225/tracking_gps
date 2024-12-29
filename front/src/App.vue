@@ -11,50 +11,52 @@ export default {
     name: 'Map',
     mounted() {
 
-        function updateCircle(circle, lat, lng) {
-            circle.setLatLng([lat, lng]);
-        }
-
-        function observer(url, circle_ip1, circle_ip2) {
+        // observer 
+        function observer(url, circlesMap) {
             const ws = new WebSocket(url);
-            ws.onopen = () => {
-                console.log(`WebSocket connecté à l'url : ${url}`);
-            };
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                // if (data.ip === "192.0.0.1") {
                 console.log(data);
-                updateCircle(circle_ip1, data.lat, data.lng);
-                // } else if (data.ip === "192.0.0.2") {
-                //     updateCircle(circle_ip2, data.lat, data.lng);
-                // }
+
+                // new IP : creation of a new circle
+                if (!circlesMap.has(data.IP)) {
+                    const i = circlesMap.size % 3;
+                    let color;
+                    if (i === 0) {
+                        color = 'rgb(255, 0, 0)';
+                    } else if (i === 1) {
+                        color = 'rgb(0, 0, 255)';
+                    } else {
+                        color = 'rgb(255, 150, 0)';
+                    }
+                    var circle = L.circle([data.latitude, data.longitude], {
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 0.4,
+                        radius: 20
+                    }).addTo(map);
+                    circle.bindPopup(`L'utilisateur ${data.IP} a été détecté dans cette zone`);
+                    circlesMap.set(data.IP, circle);
+                }
+
+                // updating the circle
+                circlesMap.get(data.IP).setLatLng([data.latitude, data.longitude]);
+
             };
         }
 
-        var map = L.map('map').setView([43.30856651983747, -0.36764327846338196], 14);
+        // map (object) containing all circles
+        const circlesMap = new Map();
 
+        // leaflet map
+        var map = L.map('map').setView([43.30856651983747, -0.36764327846338196], 14);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 20,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        var circle_1 = L.circle([43.31674716329061, -0.35925523954980837], {
-            color: 'red',
-            fillColor: 'red',
-            fillOpacity: 0.4,
-            radius: 20
-        }).addTo(map);
-        circle_1.bindPopup("L'utilisateur IP1 a été détecté dans cette zone.");
-
-        var circle_2 = L.circle([43.32674716329061, -0.36925523954980837], {
-            color: 'blue',
-            fillColor: 'blue',
-            fillOpacity: 0.4,
-            radius: 20
-        }).addTo(map);
-        circle_2.bindPopup("L'utilisateur IP2 a été détecté dans cette zone.");
-
-        observer("ws://localhost:8000/ws/coordonnees", circle_1, circle_2); 
+        // observe
+        observer("ws://localhost:8000/ws/coordonnees", circlesMap); 
 
     }
 };
