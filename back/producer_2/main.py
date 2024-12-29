@@ -27,14 +27,17 @@ def main():
     visited_points = [previous_node]
     try : 
         while True:
+
             # generate visited points
-            next_point = generate_point(graph, previous_node,visited_points)
-            visited_points.append(next_point)
+            next_point = get_random_neighbor(graph, previous_node, visited_points)
+            coordinates = get_coordinates(graph, next_point)
+            previous_node = next_point
+
             # Envoie du message au Kafka
             try : 
-                producer.produce(topic, key=IP, value=json.dumps(next_point).encode('utf-8'), partition=partition)
+                producer.produce(topic, key=IP, value=json.dumps(coordinates).encode('utf-8'), partition=partition)
                 producer.flush()
-                print(f"Message envoyé : {next_point} (Partition: {partition})")
+                print(f"Message envoyé : {coordinates} (Partition: {partition})")
                 time.sleep(1)
             except Exception as e :
                 print(f"Erreur : {e}")

@@ -36,18 +36,13 @@ def get_random_neighbor(graph, node, visited_points) :
         next_node = rd.choice(filtered_neighbors_list)
     else :
         next_node = rd.choice(neighbors_list)
-    
+
+    # adding the next point to visited nodes
+    if next_node not in visited_points :
+        visited_points.append(next_node)
+
     return next_node
 
-
-def generate_point(graph, previous_node,visited_points):
-    # visiting the nodes
-    neighbor = get_random_neighbor(graph, previous_node,visited_points)
-
-    # convert the nodes into classic coordinates (latitude and longitude)
-    neighbor = get_coordinates(graph, neighbor) 
-
-    return neighbor
 
 def get_local_ip():
     try:
