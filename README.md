@@ -16,6 +16,8 @@ Ce projet permet de suivre les déplacements de deux utilisateurs fictifs sur un
 
 ``` localhost:5371 ```
 
+Sur cette page, il est possible de cliquer sur les utilisateurs pour voir leur IP respective. 
+
 4. Pour arrêter les conteneurs et supprimer les volumes associés :
 
 ``` docker compose down -v ```
@@ -24,7 +26,7 @@ Ce projet permet de suivre les déplacements de deux utilisateurs fictifs sur un
 
 La base de données est automatiquement initialisée et prête à être utilisée. Elle est petit à petit remplie par des coordonnées GPS fictives. 
 
-Ces coordonnées sont générées aléatoirement mais de manière réaliste puisque l'utilisateur ne peut se déplacer que sur les noeuds consécutifs du graphe routier de la ville de Pau, récupéré en amont.  
+Ces coordonnées sont générées aléatoirement mais de manière réaliste puisque l'utilisateur ne peut se déplacer que sur les noeuds consécutifs du graphe routier de la ville de Pau, récupéré en amont.
 
 Pour gérer les consumers et producers, vous pouvez utiliser les commandes suivantes : 
 
