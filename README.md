@@ -20,13 +20,6 @@ Ce projet permet de suivre les déplacements de deux utilisateurs fictifs sur un
 
 ``` docker compose down -v ```
 
-A noter que nous avons eu au dernier moment des problèmes avec l'API d'Overpass (utilisée pour récupérer le graphe de Pau en Python) ; si les points n'apparaissent pas sur la carte il faut relancer les conteneurs des producers : 
-
-``` 
-docker restart producer 
-docker restart producer_2 
-```
-
 ## Fonctionnalités
 
 La base de données est automatiquement initialisée et prête à être utilisée. Elle est petit à petit remplie par des coordonnées GPS fictives. 

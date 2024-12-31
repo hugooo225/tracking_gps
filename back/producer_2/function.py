@@ -9,7 +9,12 @@ def get_coordinates(graph, node) :
 
 # get the graph of the considered city
 def get_city_graph(city) :
-    return ox.graph_from_place(city, network_type='drive', simplify=True).to_undirected()
+    city_name = city.split(",")[0].lower().strip()
+    try :
+        graph = ox.load_graphml(f"{city_name}.graphml")
+    except FileNotFoundError :
+        graph = ox.graph_from_place(city, network_type='drive', simplify=True).to_undirected()
+    return graph
 
 # get a random node from the graph
 def get_random_node(graph) :
