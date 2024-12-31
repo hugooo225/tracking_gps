@@ -1,6 +1,7 @@
 # Projet d'Architecture Microservices : Tracking GPS
 
 Ce projet permet de suivre les déplacements de deux utilisateurs fictifs sur une carte au sein de la ville de Pau. 
+Ce travail a été réalisé par Clément MOUNIC, Acharf MAZOUARA et Hugo HERSANT dans le cadre de notre formation à CY Tech. 
 
 ## Installation et lancement
 
