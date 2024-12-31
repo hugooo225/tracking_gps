@@ -15,7 +15,7 @@ Ce travail a été réalisé par Clément MOUNIC, Achraf MAZOUARA et Hugo HERSAN
 
 3. Accédez à l'application dans votre navigateur à l'adresse :
 
-``` localhost:5371 ```
+``` localhost:5173 ```
 
 Sur cette page, il est possible de cliquer sur les utilisateurs pour voir leur adresse IP. 
 
