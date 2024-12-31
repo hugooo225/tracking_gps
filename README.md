@@ -17,7 +17,7 @@ Ce travail a été réalisé par Clément MOUNIC, Achraf MAZOUARA et Hugo HERSAN
 
 ``` localhost:5371 ```
 
-Sur cette page, il est possible de cliquer sur les utilisateurs pour voir leur IP respective. 
+Sur cette page, il est possible de cliquer sur les utilisateurs pour voir leur adresse IP. 
 
 4. Pour arrêter les conteneurs et supprimer les volumes associés :
 
