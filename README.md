@@ -2,17 +2,17 @@
 
 Ce projet permet de suivre les déplacements de deux utilisateurs fictifs sur une carte au sein de la ville de Pau. 
 
-## Installation et Lancement
+## Installation et lancement
 
 1. Clonez le dépôt en local :
 
 ``` git clone https://github.com/hugooo225/tracking_gps.git ```
 
-2. Lancez les conteneurs avec Docker Compose :
+2. Lancez les conteneurs :
 
 ``` docker compose up --build ```
 
-3. Accédez à l'application dans votre navigateur à l'adresse suivante :
+3. Accédez à l'application dans votre navigateur à l'adresse :
 
 ``` localhost:5371 ```
 
@@ -40,4 +40,4 @@ Avec {container} valant "producer", "producer_2" ou "consumer".
 
 Vous pouvez également installer LazyDocker via la commande : 
 
-``` curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+``` curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash ```
