@@ -46,4 +46,4 @@ def get_local_ip():
             ip_address = s.getsockname()[0]
         return ip_address
     except Exception as e:
-        return f"Erreur : {e}"
+        return f"Erreur : {e}"  
