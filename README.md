@@ -6,19 +6,19 @@ Ce projet permet de suivre les déplacements de deux utilisateurs fictifs sur un
 
 1. Clonez le dépôt en local :
 
->>> git clone https://github.com/hugooo225/tracking_gps.git
+> git clone https://github.com/hugooo225/tracking_gps.git
 
 2. Lancez les conteneurs avec Docker Compose :
 
->>> docker compose up --build
+> docker compose up --build
 
 3. Accédez à l'application dans votre navigateur à l'adresse suivante :
 
->>> localhost:5371
+> localhost:5371
 
 4. Pour arrêter les conteneurs et supprimer les volumes associés :
 
->>> docker compose down -v
+> docker compose down -v
 
 ## Fonctionnalités
 
@@ -28,16 +28,16 @@ Ces coordonnées sont générées aléatoirement mais de manière réaliste puis
 
 Pour gérer les consumers et producers, vous pouvez utiliser les commandes suivantes : 
 
-1. Eteindre un consumer ou un producer :
+- Eteindre un consumer ou un producer :
 
->>> docker stop {container}
+> docker stop {container}
 
-2. Rallumer un consumer ou un producer :
+- Rallumer un consumer ou un producer :
 
->>> docker start {container}
+> docker start {container}
 
 Avec {container} valant "producer", "producer_2" ou "consumer". 
 
 Vous pouvez également installer LazyDocker via la commande : 
 
->>> curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+> curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
